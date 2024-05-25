@@ -4,6 +4,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.hiltAndroid)
+    kotlin("kapt")
 }
 
 android {
@@ -25,10 +27,16 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        val properties: Properties = Properties()
+        val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
 
         buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY")}\"")
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("BASE_URL")}\"")
+        buildConfigField(
+            "String",
+            "IMAGE_BASE_URL",
+            "\"${properties.getProperty("IMAGE_BASE_URL")}\""
+        )
     }
 
     buildTypes {
@@ -70,6 +78,38 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.ui)
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    //paging 3
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+
+    //hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.material3.android)
+    kapt(libs.hilt.android.compiler)
+
+    //hilt and compose navigation
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    //coil
+    implementation(libs.coil.compose)
+
+    //navigation in compose
+    implementation(libs.androidx.navigation.compose)
+
+    //lottie
+    implementation(libs.lottie.compose)
+
+    //constraint layout
+    implementation (libs.androidx.constraintlayout.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,4 +117,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+kapt {
+    correctErrorTypes = true
 }
