@@ -4,8 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.data_source.MovieDbService
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.model.MovieDto
-import retrofit2.HttpException
-import java.io.IOException
+import com.vsdhoni5034.moviedb.feature_movie_tv.domain.error_handling.RequestErrorHandler
 import javax.inject.Inject
 
 class UpComingMoviesPagingSource @Inject constructor(
@@ -27,12 +26,8 @@ class UpComingMoviesPagingSource @Inject constructor(
                 prevKey = if (page == 1) null else page - 1,
                 nextKey = if (upComingMovies.results.isEmpty()) null else upComingMovies.page + 1
             )
-        } catch (ex: HttpException) {
-            LoadResult.Error(ex)
-        } catch (ex: IOException) {
-            LoadResult.Error(ex)
-        } catch (ex: Exception) {
-            LoadResult.Error(ex)
+        }  catch (ex: Exception) {
+            LoadResult.Error(throwable = RequestErrorHandler.getRequestedError(ex))
         }
     }
 

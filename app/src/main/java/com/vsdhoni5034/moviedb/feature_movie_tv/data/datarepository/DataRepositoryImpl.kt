@@ -4,9 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.data_source.MovieDbService
-import com.vsdhoni5034.moviedb.feature_movie_tv.data.model.MovieDetailDto
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.model.MovieDto
-import com.vsdhoni5034.moviedb.feature_movie_tv.data.model.TvShowDetailDto
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.model.TvShowDto
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.model.toDetailUi
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.paging.pagingsource.AiringTodayTvShowsPagingSource
@@ -19,6 +17,7 @@ import com.vsdhoni5034.moviedb.feature_movie_tv.data.paging.pagingsource.TopRate
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.paging.pagingsource.UpComingMoviesPagingSource
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.util.Constants
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.util.Resource
+import com.vsdhoni5034.moviedb.feature_movie_tv.domain.error_handling.RequestErrorHandler
 import com.vsdhoni5034.moviedb.feature_movie_tv.domain.model.DetailUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -122,18 +121,12 @@ class DataRepositoryImpl @Inject constructor(
         val response = movieDbService.getMovieDetail(id)
 
         try {
-            if (response.isSuccessful) {
-                val movieDetail = response.body()
-                movieDetail?.let {
-                    emit(Resource.Success(it.toDetailUi()))
-                }
-            } else {
-                emit(Resource.Error(response.message()))
+            val movieDetail = response.body()
+            movieDetail?.let {
+                emit(Resource.Success(it.toDetailUi()))
             }
-        } catch (ex: HttpException) {
-            emit(Resource.Error(ex.localizedMessage ?: "Unknown error!"))
-        } catch (ex: IOException) {
-            emit(Resource.Error(ex.localizedMessage ?: "Unknown error!"))
+        } catch (ex: Exception) {
+            emit(Resource.Error(RequestErrorHandler.getRequestedError(ex)))
         }
     }
 
@@ -143,18 +136,14 @@ class DataRepositoryImpl @Inject constructor(
         val response = movieDbService.getTvShowDetail(id)
 
         try {
-            if (response.isSuccessful) {
-                val tvShowDetail = response.body()
-                tvShowDetail?.let {
-                    emit(Resource.Success(it.toDetailUi()))
-                }
-            } else {
-                emit(Resource.Error(response.message()))
+
+            val tvShowDetail = response.body()
+            tvShowDetail?.let {
+                emit(Resource.Success(it.toDetailUi()))
             }
-        } catch (ex: HttpException) {
-            emit(Resource.Error(ex.localizedMessage ?: "Unknown error!"))
-        } catch (ex: IOException) {
-            emit(Resource.Error(ex.localizedMessage ?: "Unknown error!"))
+
+        } catch (ex: Exception) {
+            emit(Resource.Error(RequestErrorHandler.getRequestedError(ex)))
         }
 
     }

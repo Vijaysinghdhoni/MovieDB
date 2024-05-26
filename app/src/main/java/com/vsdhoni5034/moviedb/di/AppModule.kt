@@ -29,6 +29,7 @@ import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -48,11 +49,16 @@ class AppModule {
     fun providesOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
     ): OkHttpClient {
+        val defaultTimOut = 20L
         //here we firstly get the current request from chain in form of original
         //then we get the url from that request and created a new url by adding apikey for every api call
         //then created a new request with that new url and added to chain
         return OkHttpClient()
             .newBuilder()
+            .callTimeout(defaultTimOut, TimeUnit.SECONDS)
+            .connectTimeout(defaultTimOut, TimeUnit.SECONDS)
+            .readTimeout(defaultTimOut, TimeUnit.SECONDS)
+            .writeTimeout(defaultTimOut, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
             .addInterceptor { chain ->
                 val original = chain

@@ -70,6 +70,6 @@ interface MovieDbService {
     //setting screen
     //while naviagting from movie to tv screen problme in background
     //detail screen with sharedtransition
-    //proper error handling of network call and other also
     //inCache paging using remote mediator
+    //type safe naviagtion with new naviagtion update
 }

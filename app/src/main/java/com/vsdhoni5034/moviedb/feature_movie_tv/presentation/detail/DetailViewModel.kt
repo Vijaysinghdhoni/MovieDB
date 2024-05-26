@@ -74,7 +74,7 @@ class DetailViewModel @Inject constructor(
                         Log.d("MyTag", "error is viewModel")
                         detailState = detailState.copy(
                             isLoading = false,
-                            error = response.message
+                            error = response.remoteDataSourceException
                         )
                     }
                 }
@@ -97,7 +97,7 @@ class DetailViewModel @Inject constructor(
                     Log.d("MyTag", "error is viewModel")
                     detailState = detailState.copy(
                         isLoading = false,
-                        error = response.message
+                        error = response.remoteDataSourceException
                     )
                 }
             }

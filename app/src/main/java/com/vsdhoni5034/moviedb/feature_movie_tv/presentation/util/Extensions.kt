@@ -1,8 +1,12 @@
 package com.vsdhoni5034.moviedb.feature_movie_tv.presentation.util
 
+import android.content.Context
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.vsdhoni5034.moviedb.BuildConfig
+import com.vsdhoni5034.moviedb.R
+import com.vsdhoni5034.moviedb.feature_movie_tv.domain.error_handling.RemoteDataSourceException
+import okhttp3.ResponseBody
 import java.util.Locale
 
 
@@ -40,4 +44,13 @@ fun Int.minuteToRelativeTime(): String {
         hours,
         minutes
     )
+}
+
+fun RemoteDataSourceException.getError(context: Context): String {
+    return when (messageResource) {
+        is Int -> context.getString(messageResource)
+        is ResponseBody? -> messageResource!!.string()
+        is String -> messageResource
+        else -> context.getString(R.string.error_unexpected_message)
+    }
 }
