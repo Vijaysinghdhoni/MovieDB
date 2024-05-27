@@ -68,8 +68,6 @@ interface MovieDbService {
     ): Response<TvShowDetailDto>
 
     //setting screen
-    //while naviagting from movie to tv screen problme in background
     //detail screen with sharedtransition
     //inCache paging using remote mediator
-    //type safe naviagtion with new naviagtion update
 }

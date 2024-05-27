@@ -7,8 +7,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.vsdhoni5034.moviedb.feature_movie_tv.data.util.Resource
 import com.vsdhoni5034.moviedb.feature_movie_tv.domain.use_case.DetailUseCase
+import com.vsdhoni5034.moviedb.feature_movie_tv.presentation.navigation.DetailScreen
 import com.vsdhoni5034.moviedb.feature_movie_tv.presentation.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -24,17 +26,12 @@ class DetailViewModel @Inject constructor(
     var detailState by mutableStateOf(DetailScreenState())
         private set
 
-    private var detailID: Int? = null
-    private var mediaType: String? = null
 
     init {
-        detailID = savedStateHandle.get<Int>("detailID")
-        mediaType = savedStateHandle.get<String>("detailMediaType")
-        detailID?.let {
-            if (it != -1) {
-                getDetail(it, mediaType!!)
-            }
-        }
+        val detailArgs = savedStateHandle.toRoute<DetailScreen>()
+        val detailID = detailArgs.detailID.toInt()
+        val mediaType = detailArgs.detailType
+        getDetail(detailID, mediaType)
     }
 
     private fun getDetail(detailID: Int, mediaType: String) {

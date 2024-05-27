@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.hiltAndroid)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
+    id("kotlin-parcelize")
     kotlin("kapt")
 }
 
@@ -103,6 +105,9 @@ dependencies {
 
     //navigation in compose
     implementation(libs.androidx.navigation.compose)
+
+    //kotlin serialization
+    implementation(libs.kotlinx.serialization.json)
 
     //lottie
     implementation(libs.lottie.compose)
